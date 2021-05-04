@@ -1,0 +1,169 @@
+From patchwork Fri Jul 17 13:31:59 2020
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Patchwork-Submitter: Jason Wessel <jason.wessel@windriver.com>
+X-Patchwork-Id: 1331137
+X-Patchwork-Delegate: matthias.bgg@gmail.com
+Return-Path: <u-boot-bounces@lists.denx.de>
+X-Original-To: incoming@patchwork.ozlabs.org
+Delivered-To: patchwork-incoming@bilbo.ozlabs.org
+Authentication-Results: ozlabs.org;
+ spf=pass (sender SPF authorized) smtp.mailfrom=lists.denx.de
+ (client-ip=85.214.62.61; helo=phobos.denx.de;
+ envelope-from=u-boot-bounces@lists.denx.de; receiver=<UNKNOWN>)
+Authentication-Results: ozlabs.org;
+ dmarc=none (p=none dis=none) header.from=windriver.com
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits))
+ (No client certificate requested)
+ by ozlabs.org (Postfix) with ESMTPS id 4B7XBz57Lsz9sRW
+ for <incoming@patchwork.ozlabs.org>; Fri, 17 Jul 2020 23:33:47 +1000 (AEST)
+Received: from h2850616.stratoserver.net (localhost [IPv6:::1])
+ by phobos.denx.de (Postfix) with ESMTP id B07CB81BF7;
+ Fri, 17 Jul 2020 15:33:41 +0200 (CEST)
+Authentication-Results: phobos.denx.de;
+ dmarc=none (p=none dis=none) header.from=windriver.com
+Authentication-Results: phobos.denx.de;
+ spf=pass smtp.mailfrom=u-boot-bounces@lists.denx.de
+Received: by phobos.denx.de (Postfix, from userid 109)
+ id C3D3B819E8; Fri, 17 Jul 2020 15:33:40 +0200 (CEST)
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on phobos.denx.de
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+ SPF_HELO_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no
+ version=3.4.2
+Received: from mail5.wrs.com (mail5.windriver.com [192.103.53.11])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by phobos.denx.de (Postfix) with ESMTPS id 5B406819E8
+ for <u-boot@lists.denx.de>; Fri, 17 Jul 2020 15:33:36 +0200 (CEST)
+Authentication-Results: phobos.denx.de;
+ dmarc=none (p=none dis=none) header.from=windriver.com
+Authentication-Results: phobos.denx.de;
+ spf=pass smtp.mailfrom=jwessel@windriver.com
+Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com
+ [147.11.189.40])
+ by mail5.wrs.com (8.15.2/8.15.2) with ESMTPS id 06HDWRnp015498
+ (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+ Fri, 17 Jul 2020 06:32:54 -0700
+Received: from ala-lpggp3.wrs.com (147.11.105.124) by ALA-HCA.corp.ad.wrs.com
+ (147.11.189.50) with Microsoft SMTP Server id 14.3.487.0;
+ Fri, 17 Jul 2020 06:32:16 -0700
+Received: by ala-lpggp3.wrs.com (Postfix, from userid 5002)	id B063A9007AA;
+ Fri, 17 Jul 2020 06:32:16 -0700 (PDT)
+From: Jason Wessel <jason.wessel@windriver.com>
+To: <etienne.duble@imag.fr>, <joe.hershberger@ni.com>
+CC: <u-boot@lists.denx.de>
+Subject: [PATCH 1/2] bcmgenet: fix DMA buffer management
+Date: Fri, 17 Jul 2020 06:31:59 -0700
+Message-ID: <20200717133200.136257-1-jason.wessel@windriver.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+X-BeenThere: u-boot@lists.denx.de
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: U-Boot discussion <u-boot.lists.denx.de>
+List-Unsubscribe: <https://lists.denx.de/options/u-boot>,
+ <mailto:u-boot-request@lists.denx.de?subject=unsubscribe>
+List-Archive: <https://lists.denx.de/pipermail/u-boot/>
+List-Post: <mailto:u-boot@lists.denx.de>
+List-Help: <mailto:u-boot-request@lists.denx.de?subject=help>
+List-Subscribe: <https://lists.denx.de/listinfo/u-boot>,
+ <mailto:u-boot-request@lists.denx.de?subject=subscribe>
+Errors-To: u-boot-bounces@lists.denx.de
+Sender: "U-Boot" <u-boot-bounces@lists.denx.de>
+X-Virus-Scanned: clamav-milter 0.102.3 at phobos.denx.de
+X-Virus-Status: Clean
+
+This commit fixes a serious issue occurring when several network
+commands are run on a raspberry pi 4 board: for instance a "dhcp"
+command and then one or several "tftp" commands. In this case,
+packet recv callbacks were called several times on the same packets,
+and send function was failing most of the time.
+
+note: if the boot procedure is made of a single network
+command, the issue is not visible.
+
+The issue is related to management of the packet ring buffers
+(producer / consumer) and DMA.
+Each time a packet is received, the ethernet device stores it
+in the buffer and increments an index called RDMA_PROD_INDEX.
+Each time the driver outputs a received packet, it increments
+another index called RDMA_CONS_INDEX.
+
+Between each pair of network commands, as part of the driver
+'start' function, previous code tried to reset both RDMA_CONS_INDEX
+and RDMA_PROD_INDEX to 0. But RDMA_PROD_INDEX cannot be written from
+driver side, thus its value was actually not updated, and only
+RDMA_CONS_INDEX was reset to 0. This was resulting in a major
+synchronization issue between the driver and the device. Most
+visible behavior was that the driver seemed to receive again the
+packets from the previous commands (e.g. DHCP response packets
+"received" again when performing the first TFTP command).
+
+This fix consists in setting RDMA_CONS_INDEX to the same
+value as RDMA_PROD_INDEX, when resetting the driver.
+
+The same kind of fix was needed on the TX side, and a few variables
+had to be reset accordingly (c_index, tx_index, rx_index).
+
+The rx_index and tx_index have only 256 entries so the bottom 8 bits
+must be masked off.
+
+Originated-by: Etienne Dublé <etienne.duble@imag.fr>
+Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
+---
+ drivers/net/bcmgenet.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/bcmgenet.c b/drivers/net/bcmgenet.c
+index 11b6148ab6..1b7e7ba2bf 100644
+--- a/drivers/net/bcmgenet.c
++++ b/drivers/net/bcmgenet.c
+@@ -378,8 +378,6 @@ static void rx_descs_init(struct bcmgenet_eth_priv *priv)
+ 	u32 len_stat, i;
+ 	void *desc_base = priv->rx_desc_base;
+ 
+-	priv->c_index = 0;
+-
+ 	len_stat = (RX_BUF_LENGTH << DMA_BUFLENGTH_SHIFT) | DMA_OWN;
+ 
+ 	for (i = 0; i < RX_DESCS; i++) {
+@@ -403,8 +401,11 @@ static void rx_ring_init(struct bcmgenet_eth_priv *priv)
+ 	writel(RX_DESCS * DMA_DESC_SIZE / 4 - 1,
+ 	       priv->mac_reg + RDMA_RING_REG_BASE + DMA_END_ADDR);
+ 
+-	writel(0x0, priv->mac_reg + RDMA_PROD_INDEX);
+-	writel(0x0, priv->mac_reg + RDMA_CONS_INDEX);
++	/* cannot init RDMA_PROD_INDEX to 0, so align RDMA_CONS_INDEX on it instead */
++	priv->c_index = readl(priv->mac_reg + RDMA_PROD_INDEX);
++	writel(priv->c_index, priv->mac_reg + RDMA_CONS_INDEX);
++	priv->rx_index = priv->c_index;
++	priv->rx_index &= 0xFF;
+ 	writel((RX_DESCS << DMA_RING_SIZE_SHIFT) | RX_BUF_LENGTH,
+ 	       priv->mac_reg + RDMA_RING_REG_BASE + DMA_RING_BUF_SIZE);
+ 	writel(DMA_FC_THRESH_VALUE, priv->mac_reg + RDMA_XON_XOFF_THRESH);
+@@ -421,8 +422,10 @@ static void tx_ring_init(struct bcmgenet_eth_priv *priv)
+ 	writel(0x0, priv->mac_reg + TDMA_WRITE_PTR);
+ 	writel(TX_DESCS * DMA_DESC_SIZE / 4 - 1,
+ 	       priv->mac_reg + TDMA_RING_REG_BASE + DMA_END_ADDR);
+-	writel(0x0, priv->mac_reg + TDMA_PROD_INDEX);
+-	writel(0x0, priv->mac_reg + TDMA_CONS_INDEX);
++	/* cannot init TDMA_CONS_INDEX to 0, so align TDMA_PROD_INDEX on it instead */
++	priv->tx_index = readl(priv->mac_reg + TDMA_CONS_INDEX);
++	writel(priv->tx_index, priv->mac_reg + TDMA_PROD_INDEX);
++	priv->tx_index &= 0xFF;
+ 	writel(0x1, priv->mac_reg + TDMA_RING_REG_BASE + DMA_MBUF_DONE_THRESH);
+ 	writel(0x0, priv->mac_reg + TDMA_FLOW_PERIOD);
+ 	writel((TX_DESCS << DMA_RING_SIZE_SHIFT) | RX_BUF_LENGTH,
+@@ -469,8 +472,6 @@ static int bcmgenet_gmac_eth_start(struct udevice *dev)
+ 
+ 	priv->tx_desc_base = priv->mac_reg + GENET_TX_OFF;
+ 	priv->rx_desc_base = priv->mac_reg + GENET_RX_OFF;
+-	priv->tx_index = 0x0;
+-	priv->rx_index = 0x0;
+ 
+ 	bcmgenet_umac_reset(priv);
+ 

@@ -1,0 +1,105 @@
+From patchwork Fri Jul 17 13:32:00 2020
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Jason Wessel <jason.wessel@windriver.com>
+X-Patchwork-Id: 1331138
+X-Patchwork-Delegate: matthias.bgg@gmail.com
+Return-Path: <u-boot-bounces@lists.denx.de>
+X-Original-To: incoming@patchwork.ozlabs.org
+Delivered-To: patchwork-incoming@bilbo.ozlabs.org
+Authentication-Results: ozlabs.org;
+ spf=pass (sender SPF authorized) smtp.mailfrom=lists.denx.de
+ (client-ip=85.214.62.61; helo=phobos.denx.de;
+ envelope-from=u-boot-bounces@lists.denx.de; receiver=<UNKNOWN>)
+Authentication-Results: ozlabs.org;
+ dmarc=none (p=none dis=none) header.from=windriver.com
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits))
+ (No client certificate requested)
+ by ozlabs.org (Postfix) with ESMTPS id 4B7XC9676wz9sRW
+ for <incoming@patchwork.ozlabs.org>; Fri, 17 Jul 2020 23:33:57 +1000 (AEST)
+Received: from h2850616.stratoserver.net (localhost [IPv6:::1])
+ by phobos.denx.de (Postfix) with ESMTP id 8D3E181C18;
+ Fri, 17 Jul 2020 15:33:44 +0200 (CEST)
+Authentication-Results: phobos.denx.de;
+ dmarc=none (p=none dis=none) header.from=windriver.com
+Authentication-Results: phobos.denx.de;
+ spf=pass smtp.mailfrom=u-boot-bounces@lists.denx.de
+Received: by phobos.denx.de (Postfix, from userid 109)
+ id D539F81BFF; Fri, 17 Jul 2020 15:33:40 +0200 (CEST)
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on phobos.denx.de
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+ SPF_HELO_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no
+ version=3.4.2
+Received: from mail5.wrs.com (mail5.windriver.com [192.103.53.11])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by phobos.denx.de (Postfix) with ESMTPS id 9048681BF7
+ for <u-boot@lists.denx.de>; Fri, 17 Jul 2020 15:33:36 +0200 (CEST)
+Authentication-Results: phobos.denx.de;
+ dmarc=none (p=none dis=none) header.from=windriver.com
+Authentication-Results: phobos.denx.de;
+ spf=pass smtp.mailfrom=jwessel@windriver.com
+Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com
+ [147.11.189.40])
+ by mail5.wrs.com (8.15.2/8.15.2) with ESMTPS id 06HDWRno015498
+ (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+ Fri, 17 Jul 2020 06:32:37 -0700
+Received: from ala-lpggp3.wrs.com (147.11.105.124) by ALA-HCA.corp.ad.wrs.com
+ (147.11.189.50) with Microsoft SMTP Server id 14.3.487.0;
+ Fri, 17 Jul 2020 06:32:16 -0700
+Received: by ala-lpggp3.wrs.com (Postfix, from userid 5002)	id B3E5690030F;
+ Fri, 17 Jul 2020 06:32:16 -0700 (PDT)
+From: Jason Wessel <jason.wessel@windriver.com>
+To: <etienne.duble@imag.fr>, <joe.hershberger@ni.com>
+CC: <u-boot@lists.denx.de>
+Subject: [PATCH 2/2] bcmgenet: Add support for rgmii-rxid
+Date: Fri, 17 Jul 2020 06:32:00 -0700
+Message-ID: <20200717133200.136257-2-jason.wessel@windriver.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200717133200.136257-1-jason.wessel@windriver.com>
+References: <20200717133200.136257-1-jason.wessel@windriver.com>
+MIME-Version: 1.0
+X-BeenThere: u-boot@lists.denx.de
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: U-Boot discussion <u-boot.lists.denx.de>
+List-Unsubscribe: <https://lists.denx.de/options/u-boot>,
+ <mailto:u-boot-request@lists.denx.de?subject=unsubscribe>
+List-Archive: <https://lists.denx.de/pipermail/u-boot/>
+List-Post: <mailto:u-boot@lists.denx.de>
+List-Help: <mailto:u-boot-request@lists.denx.de?subject=help>
+List-Subscribe: <https://lists.denx.de/listinfo/u-boot>,
+ <mailto:u-boot-request@lists.denx.de?subject=subscribe>
+Errors-To: u-boot-bounces@lists.denx.de
+Sender: "U-Boot" <u-boot-bounces@lists.denx.de>
+X-Virus-Scanned: clamav-milter 0.102.3 at phobos.denx.de
+X-Virus-Status: Clean
+
+The commit 57805f2270c4 ("net: bcmgenet: Don't set ID_MODE_DIS when
+not using RGMII") needed to be extended for the case of using the
+rgmii-rxid.  The latest version of the Rasbperry Pi4 dtb files for the
+5.4 now specify the rgmii-rxid.
+
+Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
+---
+ drivers/net/bcmgenet.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/bcmgenet.c b/drivers/net/bcmgenet.c
+index 1b7e7ba2bf..ace1331362 100644
+--- a/drivers/net/bcmgenet.c
++++ b/drivers/net/bcmgenet.c
+@@ -457,7 +457,8 @@ static int bcmgenet_adjust_link(struct bcmgenet_eth_priv *priv)
+ 	clrsetbits_32(priv->mac_reg + EXT_RGMII_OOB_CTRL, OOB_DISABLE,
+ 			RGMII_LINK | RGMII_MODE_EN);
+ 
+-	if (phy_dev->interface == PHY_INTERFACE_MODE_RGMII)
++	if (phy_dev->interface == PHY_INTERFACE_MODE_RGMII ||
++	    phy_dev->interface == PHY_INTERFACE_MODE_RGMII_RXID)
+ 		setbits_32(priv->mac_reg + EXT_RGMII_OOB_CTRL, ID_MODE_DIS);
+ 
+ 	writel(speed << CMD_SPEED_SHIFT, (priv->mac_reg + UMAC_CMD));
