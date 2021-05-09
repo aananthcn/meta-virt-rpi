@@ -1,0 +1,13 @@
+diff -urN a/drivers/mmc/host/sdhci-iproc.c b/drivers/mmc/host/sdhci-iproc.c
+--- a/drivers/mmc/host/sdhci-iproc.c	2021-05-04 20:57:21.699559923 +0530
++++ b/drivers/mmc/host/sdhci-iproc.c	2021-05-04 21:11:59.179703476 +0530
+@@ -262,7 +262,8 @@
+ };
+ 
+ static const struct sdhci_pltfm_data sdhci_bcm2711_pltfm_data = {
+-	.quirks = SDHCI_QUIRK_MULTIBLOCK_READ_ACMD12,
++	.quirks = SDHCI_QUIRK_MULTIBLOCK_READ_ACMD12 | SDHCI_QUIRK_BROKEN_DMA |
+++		  SDHCI_QUIRK_BROKEN_ADMA,
+ 	.ops = &sdhci_iproc_32only_ops,
+ };
+ 
