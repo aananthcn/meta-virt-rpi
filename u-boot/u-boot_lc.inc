@@ -1,3 +1,6 @@
+# Author: Aananth C N
+# Date: 11 May 2021
+
 FILESEXTRAPATHS_prepend := "${THISDIR}/common:"
 
 SRC_URI_append = " \

@@ -1,3 +1,6 @@
+# Author: Aananth C N
+# Date: 11 May 2021
+
 # U-Boot verssion and machine specific changes:
 
 require u-boot_lc.inc
