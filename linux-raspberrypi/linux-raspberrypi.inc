@@ -20,7 +20,8 @@ do_compile() {
     oe_runmake O=${B}/.build-arm64 broadcom/${DTBFILE}
     oe_runmake O=${B}/.build-arm64 overlays/${DTBXENO}.dtbo
     if [ ! -s ${B}/.build-arm64/arch/arm64/boot/Image ]; then
-        oe_runmake O=.build-arm64
+        # oe_runmake O=.build-arm64
+        oe_runmake
     fi
 }
 
