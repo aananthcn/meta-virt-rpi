@@ -10,5 +10,7 @@ SRC_URI_append = " \
 UBOOT_MACHINE = "lc_rpi_4_config"
 
 do_configure_prepend () {
-    mv ${S}/../lc_rpi_4_defconfig ${S}/configs/
+    if [ ! -s ${S}/configs/lc_rpi_4_defconfig ]; then
+        install -m 644 ${S}/../lc_rpi_4_defconfig ${S}/configs/
+    fi
 }
