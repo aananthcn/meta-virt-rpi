@@ -5,6 +5,9 @@ do_deploy() {
     install -d ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}
     # cp ${S}/config.txt ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/
 
+    XEN_ADDR=0x0020000
+    DTBXENO=pi4-64-xen
+
     echo "# kernel=kernel8.img" > ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
 
     echo "# kernel_address=${XEN_ADDR}" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
