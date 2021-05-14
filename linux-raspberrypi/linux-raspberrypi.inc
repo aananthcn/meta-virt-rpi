@@ -28,3 +28,17 @@ do_compile() {
 do_compile_append() {
 
 }
+
+do_deploy_append() {
+    # Deploy cmdline.txt only for the main kernel package
+    if [ ${KERNEL_PACKAGE_NAME} = "kernel" ]; then
+        install -d ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}
+        PITFT="${@bb.utils.contains("MACHINE_FEATURES", "pitft", "1", "0", d)}"
+        if [ ${PITFT} = "1" ]; then
+            PITFT_PARAMS="fbcon=map:10 fbcon=font:VGA8x8"
+        fi
+        XEN_ARGS="console=hvc0 clk_ignore_unused "
+        CMDLINE_XEN="${XEN_ARGS}${CMDLINE}${PITFT_PARAMS}"
+        echo "${CMDLINE_XEN}" > ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/cmdline.txt
+    fi
+}
