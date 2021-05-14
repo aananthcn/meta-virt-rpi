@@ -13,14 +13,17 @@ do_compile() {
     DTBFILE=bcm2711-rpi-4-b.dtb
     DTBXENO=pi4-64-xen
 
-    if [ ! -s ${B}/.build-arm64/.config ]; then
+    if [ ! -s ${B}/.config ]; then
         # utilize kernel/configs/xen.config fragment
-        oe_runmake O=${B}/.build-arm64 bcm2711_defconfig xen.config
+        oe_runmake bcm2711_defconfig xen.config
     fi
-    oe_runmake O=${B}/.build-arm64 broadcom/${DTBFILE}
-    oe_runmake O=${B}/.build-arm64 overlays/${DTBXENO}.dtbo
-    if [ ! -s ${B}/.build-arm64/arch/arm64/boot/Image ]; then
-        # oe_runmake O=.build-arm64
+
+    # make dtb & overlay dtbo
+    oe_runmake broadcom/${DTBFILE}
+    oe_runmake overlays/${DTBXENO}.dtbo
+
+    # make Image
+    if [ ! -s ${B}/arch/arm64/boot/Image ]; then
         oe_runmake
     fi
 }
@@ -30,6 +33,9 @@ do_compile_append() {
 }
 
 do_deploy_append() {
+    DTBFILE=bcm2711-rpi-4-b.dtb
+    DTBXENO=pi4-64-xen
+
     # Deploy cmdline.txt only for the main kernel package
     if [ ${KERNEL_PACKAGE_NAME} = "kernel" ]; then
         install -d ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}
@@ -40,5 +46,10 @@ do_deploy_append() {
         XEN_ARGS="console=hvc0 clk_ignore_unused "
         CMDLINE_XEN="${XEN_ARGS}${CMDLINE}${PITFT_PARAMS}"
         echo "${CMDLINE_XEN}" > ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/cmdline.txt
+
+        # Copy dtb & overlay files
+        install -d ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/overlays
+        cp ${B}/arch/arm64/boot/dts/broadcom/${DTBFILE} ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}
+        cp ${B}/arch/arm64/boot/dts/overlays/${DTBXENO}.dtbo ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/overlays/
     fi
 }
