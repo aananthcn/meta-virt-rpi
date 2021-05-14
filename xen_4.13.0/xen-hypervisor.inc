@@ -49,6 +49,10 @@ do_deploy() {
 
     if [ -f ${B}/xen/xen ]; then
         install -m 0644 ${B}/xen/xen ${DEPLOYDIR}/xen-${MACHINE}
+
+        # copy xen image to bootfiles dir
+        install -d ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}
+        install -m 0644 ${B}/xen/xen ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/xen-${MACHINE}
     fi
 
     if [ -f ${B}/xen/xen.gz ]; then
