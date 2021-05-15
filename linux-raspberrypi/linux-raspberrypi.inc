@@ -48,8 +48,7 @@ do_deploy_append() {
         echo "${CMDLINE_XEN}" > ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/cmdline.txt
 
         # Copy dtb & overlay files
-        install -d ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/overlays
-        cp ${B}/arch/arm64/boot/dts/broadcom/${DTBFILE} ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}
-        cp ${B}/arch/arm64/boot/dts/overlays/${DTBXENO}.dtbo ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/overlays/
+        install -m 644 ${B}/arch/arm64/boot/dts/broadcom/${DTBFILE} ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}
+        install -m 644 ${B}/arch/arm64/boot/dts/overlays/${DTBXENO}.dtbo ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}
     fi
 }

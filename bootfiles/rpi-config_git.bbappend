@@ -1,13 +1,15 @@
 # Author: Aananth C N
-# Date: 16 May 2021, 12.02 AM
+# Date: 16 May 2021, 12:02 AM
 
 do_deploy() {
     install -d ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}
     # cp ${S}/config.txt ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/
 
+    # MACROS
     XEN_ADDR=0x0020000
     DTBXENO=pi4-64-xen
 
+    # Create config.txt
     echo "# kernel=kernel8.img" > ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
 
     echo "# kernel_address=${XEN_ADDR}" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
@@ -31,4 +33,7 @@ do_deploy() {
     echo "enable_uart=1" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
     echo "uart_2ndstage=1" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
     echo "init_uart_baud=11520" >> ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}/config.txt
+
+    # Copy u-boot.bin to bootfiles
+    install -m 644 ${DEPLOY_DIR_IMAGE}/u-boot.bin ${DEPLOYDIR}/${BOOTFILES_DIR_NAME}
 }

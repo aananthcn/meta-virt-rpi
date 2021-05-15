@@ -44,6 +44,7 @@ do_install() {
     oe_runmake DESTDIR="${D}" install-xen
 }
 
+# following function will be called from dom0-image.bb
 do_deploy() {
     install -d ${DEPLOYDIR}
 
@@ -63,6 +64,7 @@ do_deploy() {
         install -m 0644 ${B}/xen/xen.efi ${DEPLOYDIR}/xen-${MACHINE}.efi
     fi
 }
+
 # Scheduling the do_deploy task:
 # - deploy copies files from ${B} that are written during do_compile so must
 #   at least run afer that task has completed
