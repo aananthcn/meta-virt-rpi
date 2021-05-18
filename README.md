@@ -34,7 +34,7 @@ BBLAYERS ?= " \
 # u-boot Environment to boot Xen
 setenv bootargs 'console=hvc0 clk_ignore_unused root=/dev/mmcblk0p2 rootwait' \
 setenv do_dtbsetup 'fatload mmc 0:1 ${fdt_addr} bcm2711-rpi-4-b.dtb && fdt addr ${fdt_addr} && fdt resize && fatload mmc 0:1 0x18000 overlays/pi4-64-xen.dtbo && fdt apply 0x18000' \
-setenv load_xen 'fatload mmc 0:1 0x200000 xen-raspberrypi-64' \
+setenv load_xen 'fatload mmc 0:1 0x200000 xen-raspberrypi4-64' \
 setenv load_dom0 'fatload mmc 0:1 0x480000 Image' \
 setenv xen_bootcmd 'booti 0x200000 - ${fdt_addr}' \
 setenv boot_xen 'run do_dtbsetup; run load_xen; run load_dom0; run xen_bootcmd'

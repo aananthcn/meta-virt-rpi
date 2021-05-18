@@ -9,10 +9,10 @@ inherit core-image
 include xen-image-minimal.bb
 
 COMPATIBLE_MACHINE = "^rpi$"
+PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
 
 IMAGE_INSTALL_append += " xen packagegroup-rpi-test "
-DEPENDS += "bootfiles"
-PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
+DEPENDS += "bootfiles virtual/kernel virtual/bootloader"
 CORE_IMAGE_EXTRA_INSTALL += " u-boot"
 PREFERRED_VERSION_u-boot = "2020.07"
 PREFERRED_VERSION_xen = "4.13.0"
@@ -53,7 +53,7 @@ create_config_txt() {
     echo "enable_jtag_gpio=1" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
     echo "enable_uart=1" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
     echo "uart_2ndstage=1" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
-    echo "init_uart_baud=11520" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
+    echo "init_uart_baud=115200" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
 }
 
 
@@ -69,6 +69,7 @@ do_image_complete() {
     # Create content for boot.img 
     mkdir -p ${DEPLOY_DIR_IMAGE}/boot-img-files/overlays
     cp -r ${DEPLOY_DIR_IMAGE}/bootfiles/* ${DEPLOY_DIR_IMAGE}/boot-img-files/
+    cp -r ${DEPLOY_DIR_IMAGE}/bootfiles-kernel/* ${DEPLOY_DIR_IMAGE}/boot-img-files/
     create_config_txt ${DEPLOY_DIR_IMAGE}
     cp ${DEPLOY_DIR_IMAGE}/u-boot.bin ${DEPLOY_DIR_IMAGE}/boot-img-files/
     cp ${DEPLOY_DIR_IMAGE}/Image ${DEPLOY_DIR_IMAGE}/boot-img-files/
@@ -79,14 +80,25 @@ do_image_complete() {
         mv ${DEPLOY_DIR_IMAGE}/boot-img-files/*.dtbo ${DEPLOY_DIR_IMAGE}/boot-img-files/overlays
     fi
 
-
     # Copy files to boot.img
     mcopy -vn -i ${DEPLOY_DIR_IMAGE}/boot.img -s ${DEPLOY_DIR_IMAGE}/boot-img-files/* ::
 
-    # Testing
-    #mkdir -p ${DEPLOY_DIR_IMAGE}/rootfs
-    #cp ${B}/../deploy-${PN}-image-complete/${PN}-${MACHINE}.ext4 ${DEPLOY_DIR_IMAGE}/rootfs
+    # Create SD Card image
+    IMGFILE=${DEPLOY_DIR_IMAGE}/${PN}-${MACHINE}-sdcard.img
+    rm -f ${IMGFILE}
+    qemu-img create ${IMGFILE} 7000M
+    /sbin/parted ${IMGFILE} --script -- mklabel msdos
+    /sbin/parted ${IMGFILE} --script -- mkpart primary fat32 1048576B 268435455B
+    /sbin/parted ${IMGFILE} --script -- mkpart primary ext4 268435456B -1s
+
+    # Write boot.img to SD Card image
+    dd if=${DEPLOY_DIR_IMAGE}/boot.img of=${IMGFILE} bs=1024 seek=1024 conv=notrunc
+
+    # Write dom0 ext4 image to SD Card image
+    ROOTFS=${B}/../deploy-${PN}-image-complete/${PN}-${MACHINE}.ext4
+    dd if=${ROOTFS} of=${IMGFILE} bs=1024 seek=262144 conv=notrunc
 
     # Cleanup
     rm -rf ${DEPLOY_DIR_IMAGE}/boot-img-files
+    sync
 }
