@@ -19,7 +19,7 @@ PREFERRED_VERSION_xen = "4.13.0"
 PREFERRED_VERSION_linux-raspberrypi = "4.19.%"
 DISTRO_FEATURES += " virtualization xen" 
 
-# UBOOT_CONFIG = "lc_rpi_4_defconfig"
+# UBOOT_CONFIG = "acn_rpi_4_defconfig"
 IMAGE_FSTYPES = "ext4"
 
 
@@ -70,6 +70,7 @@ do_image_complete() {
     mkdir -p ${DEPLOY_DIR_IMAGE}/boot-img-files/overlays
     cp -r ${DEPLOY_DIR_IMAGE}/bootfiles/* ${DEPLOY_DIR_IMAGE}/boot-img-files/
     cp -r ${DEPLOY_DIR_IMAGE}/bootfiles-kernel/* ${DEPLOY_DIR_IMAGE}/boot-img-files/
+    cp -r ${DEPLOY_DIR_IMAGE}/bootfiles-u-boot/* ${DEPLOY_DIR_IMAGE}/boot-img-files/
     create_config_txt ${DEPLOY_DIR_IMAGE}
     cp ${DEPLOY_DIR_IMAGE}/u-boot.bin ${DEPLOY_DIR_IMAGE}/boot-img-files/
     cp ${DEPLOY_DIR_IMAGE}/Image ${DEPLOY_DIR_IMAGE}/boot-img-files/
