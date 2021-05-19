@@ -13,10 +13,8 @@ do_compile() {
     DTBFILE=bcm2711-rpi-4-b.dtb
     DTBXENO=pi4-64-xen
 
-    if [ ! -s ${B}/.config ]; then
-        # utilize kernel/configs/xen.config fragment
-        oe_runmake bcm2711_defconfig xen.config
-    fi
+    # utilize kernel/configs/xen.config fragment
+    oe_runmake bcm2711_defconfig xen.config
 
     # make dtb & overlay dtbo
     oe_runmake broadcom/${DTBFILE}
