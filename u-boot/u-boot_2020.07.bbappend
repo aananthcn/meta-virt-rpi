@@ -3,7 +3,7 @@
 
 # U-Boot verssion and machine specific changes:
 
-require u-boot_lc.inc
+require u-boot_acn.inc
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PV}/${MACHINE}:"
 

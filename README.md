@@ -28,7 +28,6 @@ BBLAYERS ?= " \
   /home/aananth/projects/linux-club/yocto/meta-virtualization \
   /home/aananth/projects/linux-club/yocto/meta-raspberrypi \
   /home/aananth/projects/linux-club/yocto/meta-virt-rpi \
-  /home/aananth/projects/linux-club/yocto/meta-lc-rpi \
   "
 
 # u-boot Environment to boot Xen
