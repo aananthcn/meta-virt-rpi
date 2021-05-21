@@ -21,9 +21,7 @@ do_compile() {
     oe_runmake overlays/${DTBXENO}.dtbo
 
     # make Image
-    if [ ! -s ${B}/arch/arm64/boot/Image ]; then
-        oe_runmake
-    fi
+    oe_runmake
 }
 
 do_compile_append() {

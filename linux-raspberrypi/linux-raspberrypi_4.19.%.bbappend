@@ -4,7 +4,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files/4.19/:"
 
 # Linux patches and changes specific to raspberrypi4
-SRC_URI_append = " \
+SRC_URI += " \
         file://0001-Add-Xen-overlay-for-the-Pi-4.patch \
         file://0002-Disable-DMA-in-sdhci-driver.patch \
         file://0003-Fix-PCIe-in-dom0-for-RPi4.patch \
