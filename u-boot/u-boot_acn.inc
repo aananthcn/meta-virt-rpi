@@ -9,6 +9,7 @@ SRC_URI_append = " \
 "
 
 UBOOT_MACHINE = "acn_rpi_4_config"
+PROVIDES = "virtual/bootloader"
 
 do_configure_prepend () {
     install -m 644 ${S}/../acn_rpi_4_defconfig ${S}/configs/

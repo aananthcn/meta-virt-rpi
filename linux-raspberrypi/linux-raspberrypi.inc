@@ -1,6 +1,9 @@
 # Author: Aananth C N
 # Date: 11 May 2021
 
+
+PROVIDES = "virtual/kernel"
+
 do_configure_prepend() {
 
 }
@@ -43,12 +46,12 @@ do_deploy_append() {
         if [ ${PITFT} = "1" ]; then
             PITFT_PARAMS="fbcon=map:10 fbcon=font:VGA8x8"
         fi
-        XEN_ARGS="console=hvc0 clk_ignore_unused "
+        XEN_ARGS="console=hvc0 clk_ignore_unused quiet "
         CMDLINE_XEN="${XEN_ARGS}${CMDLINE}${PITFT_PARAMS}"
         echo "${CMDLINE_XEN}" > ${DESTDIR}/cmdline.txt
-
-        # Copy dtb & overlay files
-        install -m 644 ${B}/arch/arm64/boot/dts/broadcom/${DTBFILE} ${DESTDIR}
-        install -m 644 ${B}/arch/arm64/boot/dts/overlays/${DTBXENO}.dtbo ${DESTDIR}
     fi
+
+    # Copy dtb & overlay files
+    install -m 644 ${B}/arch/arm64/boot/dts/broadcom/${DTBFILE} ${DESTDIR}
+    install -m 644 ${B}/arch/arm64/boot/dts/overlays/${DTBXENO}.dtbo ${DESTDIR}
 }

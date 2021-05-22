@@ -19,7 +19,6 @@ PREFERRED_VERSION_xen = "4.13.0"
 PREFERRED_VERSION_linux-raspberrypi = "4.19.%"
 DISTRO_FEATURES += " virtualization xen" 
 
-# UBOOT_CONFIG = "acn_rpi_4_defconfig"
 IMAGE_FSTYPES = "ext4"
 
 
@@ -54,6 +53,49 @@ create_config_txt() {
     echo "enable_uart=1" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
     echo "uart_2ndstage=1" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
     echo "init_uart_baud=115200" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
+}
+
+
+create_rootfs_configs() {
+    HOSTNAME="xen-dom0"
+
+    # /etc/hostname
+    sudo bash -c "echo ${HOSTNAME} > ${IMAGE_ROOTFS}/etc/hostname"
+
+    # /etc/hosts
+    sudo bash -c "cat > ${IMAGE_ROOTFS}/etc/hosts" <<EOF
+    127.0.0.1	localhost
+    127.0.1.1	${HOSTNAME}
+
+    # The following lines are desirable for IPv6 capable hosts
+    ::1     ip6-localhost ip6-loopback
+    fe00::0 ip6-localnet
+    ff00::0 ip6-mcastprefix
+    ff02::1 ip6-allnodes
+    ff02::2 ip6-allrouters
+EOF
+
+    # /etc/fstab
+    sudo bash -c "cat > ${IMAGE_ROOTFS}/etc/fstab" <<EOF
+    proc            /proc           proc    defaults          0       0
+    /dev/mmcblk0p1  /boot           vfat    defaults          0       2
+    /dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
+EOF
+
+    # /etc/network/interfaces.d/eth0
+    sudo bash -c "cat > ${IMAGE_ROOTFS}/etc/network/interfaces.d/eth0" <<EOF
+    auto eth0
+    iface eth0 inet manual
+EOF
+    sudo chmod 0644 ${IMAGE_ROOTFS}/etc/network/interfaces.d/eth0
+
+    # /etc/network/interfaces.d/xenbr0
+    sudo bash -c "cat > ${IMAGE_ROOTFS}/etc/network/interfaces.d/xenbr0" <<EOF
+    auto xenbr0
+    iface xenbr0 inet dhcp
+    bridge_ports eth0
+EOF
+    sudo chmod 0644 ${IMAGE_ROOTFS}/etc/network/interfaces.d/xenbr0
 }
 
 
