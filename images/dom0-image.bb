@@ -8,15 +8,18 @@ LICENSE = "MIT"
 inherit core-image
 include xen-image-minimal.bb
 
+PROVIDES = "dom0-image"
+
 COMPATIBLE_MACHINE = "^rpi$"
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
+PREFERRED_PROVIDER_virtual/kernel = "linux-xen"
 
 IMAGE_INSTALL_append += " xen packagegroup-rpi-test "
 DEPENDS += "bootfiles virtual/kernel virtual/bootloader"
 CORE_IMAGE_EXTRA_INSTALL += " u-boot"
 PREFERRED_VERSION_u-boot = "2020.07"
 PREFERRED_VERSION_xen = "4.13.0"
-PREFERRED_VERSION_linux-raspberrypi = "4.19.%"
+#PREFERRED_VERSION_linux-raspberrypi = "4.19.%"
 DISTRO_FEATURES += " virtualization xen" 
 
 IMAGE_FSTYPES = "ext4"
