@@ -1,6 +1,15 @@
-auto eth0
-iface eth0 inet manual
+# The loopback network interface
+auto lo
+iface lo inet loopback
 
+# The ethernet
+auto eth0
+iface eth0 inet static
+    address 192.168.137.101
+    netmask 255.255.255.0
+    gateway 192.168.137.1
+
+# The Xen bridge
 auto xenbr0
 iface xenbr0 inet dhcp
 bridge_ports eth0

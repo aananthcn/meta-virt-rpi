@@ -16,7 +16,7 @@ PREFERRED_PROVIDER_virtual/kernel = "linux-xen"
 
 IMAGE_INSTALL_append += " xen packagegroup-rpi-test "
 DEPENDS += "bootfiles virtual/kernel virtual/bootloader xen"
-CORE_IMAGE_EXTRA_INSTALL += " u-boot"
+CORE_IMAGE_EXTRA_INSTALL += " u-boot openssh"
 PREFERRED_VERSION_u-boot = "2020.07"
 PREFERRED_VERSION_xen = "4.13.0"
 
