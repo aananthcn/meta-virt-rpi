@@ -14,8 +14,9 @@ COMPATIBLE_MACHINE = "^rpi$"
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
 PREFERRED_PROVIDER_virtual/kernel = "linux-xen"
 
-IMAGE_INSTALL_append += " xen packagegroup-rpi-test "
-DEPENDS += "bootfiles virtual/kernel virtual/bootloader xen"
+IMAGE_INSTALL_append += " xen packagegroup-rpi-test tree vim htop"
+
+DEPENDS += "bootfiles virtual/kernel virtual/bootloader xen busybox dom0-startup"
 CORE_IMAGE_EXTRA_INSTALL += " u-boot openssh"
 PREFERRED_VERSION_u-boot = "2020.07"
 PREFERRED_VERSION_xen = "4.13.0"
@@ -90,7 +91,7 @@ do_image_complete() {
     # Create SD Card image
     IMGFILE=${DEPLOY_DIR_IMAGE}/${PN}-${MACHINE}-sdcard.img
     rm -f ${IMGFILE}
-    qemu-img create ${IMGFILE} 7000M
+    qemu-img create ${IMGFILE} 3328M
     /sbin/parted ${IMGFILE} --script -- mklabel msdos
     /sbin/parted ${IMGFILE} --script -- mkpart primary fat32 1048576B 268435455B
     /sbin/parted ${IMGFILE} --script -- mkpart primary ext4 268435456B -1s

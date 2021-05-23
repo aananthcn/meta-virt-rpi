@@ -8,7 +8,6 @@ PREFERRED_PROVIDER_virtual/kernel = "linux-xen" \
 CORE_IMAGE_EXTRA_INSTALL += " u-boot" \
 PREFERRED_VERSION_u-boot = "2020.07" \
 PREFERRED_VERSION_xen = "4.13.0" \
-# PREFERRED_VERSION_linux-raspberrypi = "4.19.%" \
 DISTRO_FEATURES += " virtualization xen" \
 DL_DIR = "/opt/dl-dir"
 
