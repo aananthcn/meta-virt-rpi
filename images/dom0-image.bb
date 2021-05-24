@@ -14,7 +14,7 @@ COMPATIBLE_MACHINE = "^rpi$"
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
 PREFERRED_PROVIDER_virtual/kernel = "linux-xen"
 
-IMAGE_INSTALL_append += " xen packagegroup-rpi-test tree vim htop"
+IMAGE_INSTALL_append += " xen packagegroup-rpi-test tree vim htop dom0-startup"
 
 DEPENDS += "bootfiles virtual/kernel virtual/bootloader xen busybox dom0-startup"
 CORE_IMAGE_EXTRA_INSTALL += " u-boot openssh"

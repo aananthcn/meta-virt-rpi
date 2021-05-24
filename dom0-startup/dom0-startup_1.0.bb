@@ -19,5 +19,5 @@ DEPENDS_append = " update-rc.d-native"
 do_install() {
     install -d ${D}${sysconfdir}/init.d
     install -m 755 ${WORKDIR}/dom0-startup.sh ${D}${sysconfdir}/init.d/
-    update-rc.d -r ${D} dom0-startup.sh start 20 S .
+    update-rc.d -r ${D} dom0-startup.sh start 10 5 .
 }
