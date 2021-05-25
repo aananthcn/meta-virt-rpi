@@ -39,6 +39,12 @@ EOF
 create_local_conf() {
     cat > conf/local.conf <<EOF
 MACHINE ?= "raspberrypi4-64"
+
+PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
+PREFERRED_PROVIDER_virtual/kernel = "linux-xen" 
+PREFERRED_VERSION_u-boot = "2020.07"
+PREFERRED_VERSION_xen = "4.13.0"
+
 DISTRO_FEATURES += " virtualization xen" 
 DL_DIR = "/opt/dl-dir"
 EOF

@@ -11,15 +11,11 @@ include xen-image-minimal.bb
 PROVIDES = "dom0-image"
 
 COMPATIBLE_MACHINE = "^rpi$"
-PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
-PREFERRED_PROVIDER_virtual/kernel = "linux-xen"
 
 IMAGE_INSTALL_append += " xen packagegroup-rpi-test tree vim htop dom0-startup"
 
 DEPENDS += "bootfiles virtual/kernel virtual/bootloader xen busybox dom0-startup"
 CORE_IMAGE_EXTRA_INSTALL += " u-boot openssh"
-PREFERRED_VERSION_u-boot = "2020.07"
-PREFERRED_VERSION_xen = "4.13.0"
 
 DISTRO_FEATURES += " virtualization xen" 
 DISTRO_FEATURES += " ipv4 ipv6"

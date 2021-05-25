@@ -19,10 +19,11 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 
 S = "${WORKDIR}/git"
+B = "${WORKDIR}/build"
 
 do_configure() {
     # utilize kernel/configs/xen.config fragment
-    oe_runmake bcm2711_defconfig xen.config
+    oe_runmake -C ${S} O=${B} bcm2711_defconfig xen.config
 }
 
 do_compile() {
