@@ -4,7 +4,7 @@ Welcome to the yocto layer that stores the recipes that are customised to make X
 ## Setup yocto 
  * `git clone https://github.com/aananthcn/meta-virt-rpi.git`
  * `./meta-virt-rpi/setup-yocto.sh`
-<br>After the above 2 steps, if you do ls from your current directory, you should see the following:
+<br>After the above 2 steps, if you do ls from your current directory, you should see the following:<br>
   `meta-openembedded  meta-raspberrypi  meta-virt-rpi  meta-virtualization  poky`
 
 ## Build the target image
@@ -13,7 +13,7 @@ Welcome to the yocto layer that stores the recipes that are customised to make X
    * This will take some time (~8 hrs for first time on 10th Gen Intel i5 machine with 16GB RAM)
 
 ## Flash the image
- * From build folder navigate to `tmp-glibc/deploy/images/raspberrypi4-64`
+ * From build folder, navigate to `tmp-glibc/deploy/images/raspberrypi4-64`
  * Check for image with name `dom0-image-raspberrypi4-64-sdcard.img`
  * Follow either of these steps to flash the above image into the sd card
    * Linux: https://www.raspberrypi.org/documentation/installation/installing-images/linux.md
@@ -31,7 +31,7 @@ Welcome to the yocto layer that stores the recipes that are customised to make X
    * Type 't' to see all timer queues.
  * Type `'CTRL-a' three times` to go back to domain 0 (Linux).
    * Type `htop` to know the resources allocated to domain 0 (Linux)
-   * *You will that only 481 MB of RAM is allocated for domain 0, this is because Xen 4.13.0 supports only 1 GB of RAM on RPi4. I saw someone has submitted a patch for supporting more than 1 GB RAM in 4.13.2. Those are my next steps to work.* 
+   * *You will notice that only 481 MB of RAM is allocated for domain 0, this is because Xen 4.13.0 supports only 1 GB of RAM on RPi4. I saw someone has submitted a patch for supporting more than 1 GB RAM in 4.13.2. Those are my next steps to work.* 
  * Happy hacking!
 
 
