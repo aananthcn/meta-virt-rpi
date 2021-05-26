@@ -46,7 +46,8 @@ PREFERRED_VERSION_u-boot = "2020.07"
 PREFERRED_VERSION_xen = "4.13.0"
 
 DISTRO_FEATURES += " virtualization xen" 
-EXTRA_IMAGE_FEATURES += " allow-empty-password empty-root-password"
+EXTRA_IMAGE_FEATURES += "allow-empty-password"
+EXTRA_IMAGE_FEATURES += "empty-root-password"
 DL_DIR = "/opt/dl-dir"
 EOF
 }
