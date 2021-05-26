@@ -4,7 +4,7 @@ Welcome to the yocto layer that stores the recipes that are customised to make X
 ## Setup yocto 
  * `git clone https://github.com/aananthcn/meta-virt-rpi.git`
  * `./meta-virt-rpi/setup-yocto.sh`
-<br>After the above 2 steps, if you do ls from your current directory, you should see the following:<br>
+<br>After the above 2 steps, if you do `ls` from your current directory, you should see the following:<br>
   `meta-openembedded  meta-raspberrypi  meta-virt-rpi  meta-virtualization  poky`
 
 ## Build the target image
