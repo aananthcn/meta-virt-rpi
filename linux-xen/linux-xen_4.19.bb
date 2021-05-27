@@ -12,6 +12,7 @@ SRC_URI = " \
     file://0001-Add-Xen-overlay-for-the-Pi-4.patch \
     file://0002-Disable-DMA-in-sdhci-driver.patch \
     file://0003-Fix-PCIe-in-dom0-for-RPi4.patch \
+    file://acn_xen_rpi4_defconfig \
 "
 SRCREV = "cc39f1c9f82f6fe5a437836811d906c709e0661c"
 
@@ -22,6 +23,7 @@ S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
 do_configure() {
+    cp ${WORKDIR}/acn_xen_rpi4_defconfig ${S}/arch/arm64/configs/bcm2711_defconfig
     # utilize kernel/configs/xen.config fragment
     oe_runmake -C ${S} O=${B} bcm2711_defconfig xen.config
 }

@@ -1,0 +1,8 @@
+[Match]
+Name=eth*
+KernelCommandLine=!nfsroot
+
+[Network]
+DNS=8.8.8.8
+Address=192.168.137.101/24
+Gateway=192.168.137.1

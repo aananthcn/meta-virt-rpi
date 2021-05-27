@@ -49,6 +49,14 @@ DISTRO_FEATURES += " virtualization xen"
 EXTRA_IMAGE_FEATURES += "allow-empty-password"
 EXTRA_IMAGE_FEATURES += "empty-root-password"
 DL_DIR = "/opt/dl-dir"
+
+DISTRO_FEATURES_append = " systemd"
+DISTRO_FEATURES_BACKFILL_CONSIDERED += "sysvinit"
+VIRTUAL-RUNTIME_init_manager = "systemd"
+VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"
+
+DISTRO_FEATURES_append = " wifi "
+IMAGE_INSTALL_append = " linux-firmware-rpidistro-bcm43430 "
 EOF
 }
 
