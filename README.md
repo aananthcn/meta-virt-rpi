@@ -34,6 +34,14 @@ Welcome to the yocto layer that stores the recipes that are customised to make X
    * *You will notice that only 481 MB of RAM is allocated for domain 0, this is because Xen 4.13.0 supports only 1 GB of RAM on RPi4. I saw someone has submitted a patch for supporting more than 1 GB RAM in 4.13.2. Those are my next steps to work.* 
  * Happy hacking!
 
+## Setup Information
+ * Ethernet IP (IPv4)
+   * Set your host ethernet as manual and set the host-ip as 192.168.137.100
+   * The target in both bootloader and in domain-0 is set as 192.168.137.101
+ * User ID & Password
+   * username: root
+   * No password in serial console.
+   * Setup password via serial console for SSH login and copy of files.
 
 # Design Notes
 ## meta-virt-rpi
