@@ -1,0 +1,17 @@
+# Author: Aananth C N
+# Date: 28 May 2021, 10:24 PM
+
+[Unit]
+Description=Domain 0 startup Service
+After=network-online.target
+StartLimitIntervalSec=1
+
+[Service]
+Type=oneshot
+Restart=no
+#RestartSec=1
+User=root
+ExecStart=/usr/bin/dom0-startup.sh
+
+[Install]
+WantedBy=multi-user.target

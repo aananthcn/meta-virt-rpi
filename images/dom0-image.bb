@@ -12,7 +12,8 @@ PROVIDES = "dom0-image"
 
 COMPATIBLE_MACHINE = "^rpi$"
 
-IMAGE_INSTALL_append += " xen packagegroup-rpi-test tree vim htop dom0-startup"
+IMAGE_INSTALL_append += " xen tree vim htop dom0-startup init-ifupdown"
+IMAGE_INSTALL_append += " xen-tools"
 
 DEPENDS += "bootfiles virtual/kernel virtual/bootloader xen busybox dom0-startup"
 CORE_IMAGE_EXTRA_INSTALL += " u-boot openssh"
@@ -22,6 +23,16 @@ DISTRO_FEATURES += " ipv4 ipv6"
 
 IMAGE_FSTYPES = "ext4"
 
+OMXPLAYER  = "${@bb.utils.contains('MACHINE_FEATURES', 'vc4graphics', '', 'omxplayer', d)}"
+
+RDEPENDS_${PN} = "\
+    ${OMXPLAYER} \
+    bcm2835-tests \
+    rpio \
+    rpi-gpio \
+    pi-blaster \
+    bluez5 \
+"
 
 create_config_txt() {
     # MACROS
