@@ -1,4 +1,6 @@
-Welcome to the yocto layer that stores the recipes that are customised to make Xen to work on Raspberry Pi 4.
+Xen Development Environment on RaspberryPi
+---
+Welcome to the yocto based distro building platform that supports Xen and enables you to develop virtualized guest domains on Raspberry Pi 4.
 
 # Getting Started
 ## Setup yocto 
@@ -13,7 +15,7 @@ Welcome to the yocto layer that stores the recipes that are customised to make X
    * This will take some time (~8 hrs for first time on 10th Gen Intel i5 machine with 16GB RAM)
 
 ## Flash the image
- * From build folder, navigate to `tmp-glibc/deploy/images/raspberrypi4-64`
+ * From build folder, navigate to `tmp[-glibc]/deploy/images/raspberrypi4-64`
  * Check for image with name `dom0-image-raspberrypi4-64-sdcard.img`
  * Follow either of these steps to flash the above image into the sd card
    * Linux: https://www.raspberrypi.org/documentation/installation/installing-images/linux.md

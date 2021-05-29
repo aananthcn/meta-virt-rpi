@@ -56,6 +56,8 @@ VIRTUAL-RUNTIME_init_manager = "systemd"
 VIRTUAL-RUNTIME_initscripts = "systemd-compat-units"
 
 IMAGE_INSTALL_append = " linux-firmware-rpidistro-bcm43430 "
+
+DISTRO ?= "xen-rpi"
 EOF
 }
 
