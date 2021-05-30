@@ -237,18 +237,3 @@ do_install_prepend() {
     # so also need to unset CFLAGS here:
     unset CFLAGS
 }
-
-# Following lines were added by Aananth on 30 May 2021 to resolve systemd
-# startup issues related to xen daemons
-FILESEXTRAPATHS_prepend  := "${THISDIR}/files:"
-
-SRC_URI += "file://xen.conf"
-
-FILES_${PN} += " \
-    ${libdir}/modules-load.d/xen.conf \
-"
-
-do_deploy_append() {
-    install -d ${D}${libdir}/modules-load.d/
-    install ${B}/../xen.conf ${D}${libdir}/modules-load.d/xen.conf
-}
