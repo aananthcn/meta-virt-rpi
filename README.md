@@ -34,6 +34,8 @@ Welcome to the yocto based distro building platform that supports Xen and enable
  * Type `'CTRL-a' three times` to go back to domain 0 (Linux).
    * Type `htop` to know the resources allocated to domain 0 (Linux)
    * *You will notice that only 481 MB of RAM is allocated for domain 0, this is because Xen 4.13.0 supports only 1 GB of RAM on RPi4. I saw someone has submitted a patch for supporting more than 1 GB RAM in 4.13.2. Those are my next steps to work.* 
+   * Type `xl list` to list all domains running on the system.
+   * Type `xl info` to know detailed information about xen hypervisor.
  * Happy hacking!
 
 ## Setup Information
