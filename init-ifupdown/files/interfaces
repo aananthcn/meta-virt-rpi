@@ -12,4 +12,4 @@ iface eth0 inet static
 # The Xen bridge
 auto xenbr0
 iface xenbr0 inet dhcp
-bridge_ports eth0
+    bridge_ports eth0
