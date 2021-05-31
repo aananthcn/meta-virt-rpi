@@ -1,6 +1,6 @@
 Xen Development Environment on RaspberryPi
 ---
-Welcome to the yocto based distro building platform that supports Xen and enables you to develop virtualized guest domains on Raspberry Pi 4.
+🙏🏻 Welcome to XDE - Xen Development Environment built using yocto, which enables you to develop virtualized guest domains on top of Linux as Dom0 (domain 0) on Raspberry Pi 4. To get started, please read "Getting Started" section below. 🙏🏻
 
 # Getting Started
 ## Setup yocto 
@@ -38,7 +38,7 @@ Welcome to the yocto based distro building platform that supports Xen and enable
    * Type `xl info` to know detailed information about xen hypervisor.
  * Happy hacking!
 
-## Setup Information
+## PC Setup Information
  * Ethernet IP (IPv4)
    * Set your host ethernet as manual and set the host-ip as 192.168.137.100
    * The target in both bootloader and in domain-0 is set as 192.168.137.101
