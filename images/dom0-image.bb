@@ -13,7 +13,7 @@ PROVIDES = "dom0-image"
 COMPATIBLE_MACHINE = "^rpi$"
 
 IMAGE_INSTALL_append += " xen tree vim htop dom0-startup init-ifupdown"
-IMAGE_INSTALL_append += " xen-tools util-linux e2fsprogs"
+IMAGE_INSTALL_append += " xen-tools util-linux e2fsprogs qemu"
 
 DEPENDS += "bootfiles virtual/kernel virtual/bootloader xen xen-tools busybox dom0-startup"
 CORE_IMAGE_EXTRA_INSTALL += " u-boot openssh"
