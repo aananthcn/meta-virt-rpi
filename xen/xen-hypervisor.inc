@@ -37,11 +37,11 @@ do_configure() {
 }
 
 do_compile() {
-    oe_runmake xen PYTHON="${PYTHON}"
+    oe_runmake xen PYTHON="${PYTHON}" XEN_TARGET_ARCH=arm64
 }
 
 do_install() {
-    oe_runmake DESTDIR="${D}" install-xen
+    oe_runmake DESTDIR="${D}" install-xen XEN_TARGET_ARCH=arm64
 }
 
 # following function will be called from dom0-image.bb

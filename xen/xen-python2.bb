@@ -9,8 +9,6 @@ COMPATIBLE_HOST = 'i686-.*-linux|(x86_64.*).*-linux|aarch64.*-linux|arm-.*-linux
 
 include xen-src.inc
 
-LIC_FILES_CHKSUM ?= "file://COPYING;md5=bbb4b1bdc2c3b6743da3c39d03249095"
-
 PV = "${XEN_REL}+git${SRCPV}"
 
 S = "${WORKDIR}/git"

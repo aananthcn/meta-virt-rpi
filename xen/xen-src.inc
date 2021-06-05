@@ -7,8 +7,10 @@
 #  libxl: error: libxl_create.c:578:libxl__domain_make: domain creation fail: Permission denied
 #  libxl: error: libxl_create.c:975:initiate_domain_create: cannot make domain: -3
 
-SRCREV ?= "RELEASE-4.13.0"
-XEN_REL ?= "4.13"
+SRCREV ?= "RELEASE-4.14.2"
+XEN_REL ?= "4.14"
 XEN_BRANCH ?= "stable-${XEN_REL}"
 
 SRC_URI = "git://xenbits.xen.org/xen.git;branch=${XEN_BRANCH}"
+
+LIC_FILES_CHKSUM ?= "file://COPYING;md5=419739e325a50f3d7b4501338e44a4e5"

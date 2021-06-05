@@ -34,6 +34,7 @@ RDEPENDS_${PN} = "\
     ${PN}-console \
     ${PN}-libxenguest \
     ${PN}-libxenlight \
+    ${PN}-libxenhypfs \
     ${PN}-libxenvchan \
     ${PN}-libxenctrl \
     ${PN}-libxlutil \
@@ -170,6 +171,8 @@ PACKAGES = " \
     ${PN}-libxenguest-dev \
     ${PN}-libxenlight \
     ${PN}-libxenlight-dev \
+    ${PN}-libxenhypfs \
+    ${PN}-libxenhypfs-dev \
     ${PN}-libxenstat \
     ${PN}-libxenstat-dev \
     ${PN}-libxenstore \
@@ -318,6 +321,19 @@ FILES_${PN}-libxenlight-dev = " \
     ${libdir}/pkgconfig/xenlight.pc \
     ${datadir}/pkgconfig/xenlight.pc \
     "
+
+# Added by Aananth C N on 5 Jun 2021, Saturday 11.38 PM
+FILES_${PN}-libxenhypfs = "         \
+    ${libdir}/libxenhypfs.so.*      \
+    ${bindir}/vchan-socket-proxy    \
+    ${sbindir}/xenhypfs             \
+"
+FILES_${PN}-libxenhypfs-dev = "     \
+    ${libdir}/libxenhypfs.so        \
+    ${libdir}/pkgconfig/xenhypfs.pc \
+    ${bindir}/vchan-socket-proxy    \
+    ${sbindir}/xenhypfs             \
+"
 
 FILES_${PN}-libxenstat = "${libdir}/libxenstat.so.*"
 FILES_${PN}-libxenstat-dev = " \
@@ -699,12 +715,12 @@ do_configure() {
 
 do_compile() {
     cd ${S}
-    oe_runmake tools PYTHON="${PYTHON}"
+    oe_runmake tools PYTHON="${PYTHON}" XEN_TARGET_ARCH=arm64
 }
 
 do_install() {
     cd ${S}
-    oe_runmake DESTDIR="${D}" install-tools
+    oe_runmake DESTDIR="${D}" install-tools XEN_TARGET_ARCH=arm64
 
     # Remove unported python 2 scripts -- see the separate xen-python2 recipe
     rm -f ${D}${bindir}/xentrace_format \

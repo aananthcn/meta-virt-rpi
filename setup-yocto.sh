@@ -43,7 +43,7 @@ MACHINE ?= "raspberrypi4-64"
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
 PREFERRED_PROVIDER_virtual/kernel = "linux-xen" 
 PREFERRED_VERSION_u-boot = "2020.07"
-PREFERRED_VERSION_xen = "4.13.0"
+# PREFERRED_VERSION_xen = "4.13.0"
 
 DISTRO_FEATURES += " virtualization xen" 
 EXTRA_IMAGE_FEATURES += "allow-empty-password"
