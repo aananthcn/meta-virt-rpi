@@ -49,7 +49,7 @@ create_config_txt() {
     echo "arm_64bit=1" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
     echo "dtoverlay=${DTBXENO}" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
     echo "dtoverlay=dwc2" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
-    echo "total_mem=1024" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
+    echo "# total_mem=1024" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
     echo "enable_gic=1" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
     echo "" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
     echo "#disable_overscan=1" >> ${DEPLOYDIR}/${BOOTIMG_DIR}/config.txt
