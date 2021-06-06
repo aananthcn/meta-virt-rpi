@@ -33,7 +33,6 @@ Xen Development Environment on RaspberryPi
    * Type 't' to see all timer queues.
  * Type `'CTRL-a' three times` to go back to domain 0 (Linux).
    * Type `htop` to know the resources allocated to domain 0 (Linux)
-   * *You will notice that only 481 MB of RAM is allocated for domain 0, this is because Xen 4.13.0 supports only 1 GB of RAM on RPi4. I saw someone has submitted a patch for supporting more than 1 GB RAM in 4.13.2. Those are my next steps to work.* 
    * Type `xl list` to list all domains running on the system.
    * Type `xl info` to know detailed information about xen hypervisor.
  * Happy hacking!
@@ -57,7 +56,7 @@ PREFERRED_PROVIDER_virtual/bootloader = "u-boot" \
 PREFERRED_PROVIDER_virtual/kernel = "linux-xen" \
 CORE_IMAGE_EXTRA_INSTALL += " u-boot" \
 PREFERRED_VERSION_u-boot = "2020.07" \
-PREFERRED_VERSION_xen = "4.13.0" \
+// PREFERRED_VERSION_xen = "4.13.0" \
 DISTRO_FEATURES += " virtualization xen" \
 DL_DIR = "/opt/dl-dir"
 
