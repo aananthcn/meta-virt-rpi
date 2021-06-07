@@ -223,6 +223,10 @@ do_configure_common() {
     oe_runconf EXTRA_CFLAGS_XEN_CORE="${EXTRA_CFLAGS_XEN_CORE}" \
                EXTRA_CFLAGS_XEN_TOOLS="${EXTRA_CFLAGS_XEN_TOOLS}" \
                PYTHON="${PYTHON}"
+
+    # Added by Aananth to enable debug logs
+    echo "CONFIG_DEBUG=y" >> xen/.config
+    echo "CONFIG_SCHED_ARINC653=y" >> xen/.config
 }
 
 do_compile_prepend() {
